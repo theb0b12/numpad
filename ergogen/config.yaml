@@ -1,3 +1,5 @@
+meta:
+  engine: 4.1.0
 units:
   kx: u
   ky: u
@@ -24,21 +26,130 @@ points:
         shift: [starting_x, starting_y]
       columns:
         1:
+
+          rows:
+            r0:
+              width: 2u
+              adjust:
+                shift: [0.5u, 0]
+              tags: horiz2u
+              column_net: P3
+            r1:
+              column_net: P2
+            r2:
+              column_net: P0
+            r3:
+              column_net: P1
+              
         2:
-          rows.r0.skip: true
-          rows.r0:
-            key:
-            height: 2u
-            # shift: [0, -.5u]
-            tags: vert2u
+          rows:
+            r0:
+              skip: true
+            r1:
+              column_net: P6
+            r2:
+              column_net: P5
+            r3:
+              column_net: P4
+          
         3:
+          rows:
+            r0:
+              column_net: P8
+            r1:
+              column_net: P7
+            r2:
+              column_net: P6
+            r3:
+              column_net: P19
         4:
-          rows.r0.skip: true
-          rows.r2.skip: true
+          rows:
+            r0:
+              skip: true
+            r1:
+              key:
+              height: 2u
+              shift: [0, -.5u]
+              tags: vert2u
+              column_net: P20
+            r2:
+              skip: true
+            r3:
+              key:
+              height: 2u
+              tags: vert2u
+              column_net: P21
+            
       rows:
         r0:
         r1:
         r2:
         r3:
 
-      # this is a test
+outlines:
+  keys:
+    - what: rectangle
+      where: true
+      size: [kx-0.5,ky-0.5]
+  
+  keycaps:
+    - what: rectangle
+      where: true
+      size: [kx-0.5,ky-0.5]
+    - what: rectangle
+      where: [vert2u]
+      size: [(kx*1)-0.5, (2ky)-0.5]
+    - what: rectangle
+      where: [horiz2u]
+      size: [(kx*2)-0.5, (1ky)-0.5]
+      fillet: 1
+
+
+  outline:
+    - what: polygon
+      operation: stack
+      fillet: 1
+      points:
+        - ref: matrix_1_r3
+          shift: [-0.5px, 0.5py]
+        - ref: matrix_1_r3
+          shift: [3.2px, 0.5py]
+        - ref: matrix_1_r3
+          shift: [3.2px, -3.2py]
+        - ref: matrix_1_r3
+          shift: [-0.5px, -3.2py]
+  
+  combo:
+    - name: outline
+    - operation: stack
+      name: keycaps
+        
+pcbs:
+  numpad:
+    template: kicad8
+    outlines:
+      main:
+        outline: outline
+    footprints:
+
+      mx_hotswap:
+        what: ceoloide/switch_mx
+        where: true
+        params:
+          hotswap: true
+          from: "{{column_net}}"
+          to: GND
+        adjust:
+          rotate: -90
+
+      nicenano:
+        what: ceoloide/mcu_nice_nano
+        where:
+          ref: matrix_1_r3
+          # this is an estimate... the real one is in the pcb
+          shift: [0.1kx, -0.3ky]
+        params:
+          reverse_mount: true
+          side: B
+        adjust:
+

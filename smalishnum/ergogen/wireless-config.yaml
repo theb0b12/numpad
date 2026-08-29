@@ -1,0 +1,199 @@
+meta:
+  engine: 4.1.0
+units:
+  kx: u
+  ky: u
+  px: kx + 2
+  py: ky + 2
+  w: 18
+  h: 17
+  $default_width: u
+  $default_height: u
+  starting_x: 170
+  starting_y: -160
+  # Default M2 Screws
+  screwSize: 1
+  standoffSize: 2.5
+
+points:
+  zones:
+    matrix:
+      anchor:
+        shift: [starting_x, starting_y]
+      columns:
+        1:
+          rows:
+            r0:
+              width: 2u
+              adjust:
+                shift: [0.5u, 0]
+              tags: horiz2u
+              column_net: P3
+            r1:
+              column_net: P2
+            r2:
+              column_net: P0
+            r3:
+              column_net: P1
+            r4:
+              column_net: P
+        2:
+          rows:
+            r0:
+              skip: true
+            r1:
+              column_net: P6
+            r2:
+              column_net: P5
+            r3:
+              column_net: P4
+            r4:
+              column_net: P
+        3:
+          rows:
+            r0:
+              column_net: P8
+            r1:
+              column_net: P7
+            r2:
+              column_net: P6
+            r3:
+              column_net: P19
+            r4:
+              column_net: P
+            
+        4:
+          rows:
+            r0:
+              skip: true
+            r1:
+              key:
+                height: 2u
+              adjust:
+                shift: [0, -.5u]
+              tags: vert2u
+              column_net: P20
+            r2:
+              skip: true
+            r3:
+              key:
+                height: 2u
+              adjust:
+                shift: [0, -.5u]
+              tags: vert2u
+              column_net: P21
+            r4:
+              key:
+                height: 1u
+              column_net: P
+
+      rows:
+        r0:
+        r1:
+        r2:
+        r3:
+        r4:
+
+outlines:
+  keys:
+    - what: rectangle
+      where: true
+      size: [kx-0.5, ky-0.5]
+  keycaps:
+    - what: rectangle
+      where: true
+      size: [kx-0.5, ky-0.5]
+    - what: rectangle
+      where: [vert2u]
+      size: [kx-0.5, (2ky)-0.5]
+    - what: rectangle
+      where: [horiz2u]
+      size: [(kx*2)-0.5, (1ky)-0.5]
+      fillet: 1
+  outline:
+    - what: polygon
+      operation: stack
+      fillet: 1
+      points:
+        - ref: matrix_1_r4
+          shift: [-0.5px, 0.5py]
+        - ref: matrix_1_r4
+          shift: [3.2px, 0.5py]
+        - ref: matrix_1_r3
+          shift: [3.2px, -3.2py]
+        - ref: matrix_1_r3
+          shift: [-0.5px, -3.2py]
+  combo:
+    - name: outline
+    - operation: stack
+      name: keycaps
+
+pcbs:
+  numpad-wireless:
+    template: kicad8
+    outlines:
+      main:
+        outline: outline
+    footprints:
+      mx_hotswap:
+        what: ceoloide/switch_mx
+        where: true
+        params:
+          hotswap: true
+          from: "{{column_net}}"
+          to: GND
+        adjust:
+          rotate: -90
+      nicenano:
+        what: ceoloide/mcu_nice_nano
+        where: matrix_1_r4 # estimate... real one is in pcb
+        adjust:
+          shift: [0.1kx, -0.3ky]
+        params:
+          reverse_mount: true
+          side: B
+      battery_connector:
+        what: ceoloide/battery_connector_jst_ph_2
+        where: matrix_1_r3
+        adjust:
+          shift: [-0.1kx, -2.5ky]
+          rotate: 90
+        params:
+          side: B
+      on_off_switch:
+        what: ceoloide/power_switch_smd_side
+        where: matrix_1_r4
+        adjust:
+          shift: [0.7kx, 0.47ky]
+          rotate: 90
+        params:
+          from: BAT_P
+      reset_switch:
+        what: ceoloide/reset_switch_smd_side
+        params:
+          from: GND
+          to: RST
+        where: matrix_1_r4
+        adjust:
+          shift: [1.5kx, 0.47ky]
+      
+      mounting_hole_1:
+        what: ceoloide/mounting_hole_plated
+        where: matrix_1_r4
+        adjust:
+          shift: [1.4kx, -0.5ky]
+      mounting_hole_2:
+        what: ceoloide/mounting_hole_plated
+        where: matrix_1_r0
+        adjust:
+          shift: [-0.5kx, 0ky]
+      mounting_hole_3:
+        what: ceoloide/mounting_hole_plated
+        where: matrix_4_r4
+        adjust:
+          shift: [-0.35kx, 0ky]
+      mounting_hole_4:
+        what: ceoloide/mounting_hole_plated
+        where: matrix_4_r1
+        adjust:
+          shift: [0kx, -0.7ky]

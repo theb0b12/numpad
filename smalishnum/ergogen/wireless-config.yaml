@@ -127,6 +127,78 @@ outlines:
     - name: outline
     - operation: stack
       name: keycaps
+  
+  switch_plate_keys:
+    - what: rectangle
+      where: true
+      size: [kx-5.1,ky-5.1]
+
+  xlBoard:
+    - name: outline
+      expand: 1.5
+
+  switch_plate:
+    - name: outline
+    - operation: subtract
+      name: switch_plate_keys
+
+  _wall_outline:
+    - name: xlBoard
+    - operation: subtract
+      name: outline
+  
+  mounting:
+      - what: circle
+        radius: screwSize
+        where: matrix_1_r4
+        adjust:
+          shift: [1.4kx, -0.5ky]
+      - what: circle
+        radius: screwSize
+        where: matrix_1_r0
+        adjust:
+          shift: [-0.5kx, 0ky]
+      - what: circle
+        radius: screwSize
+        where: matrix_4_r4
+        adjust:
+          shift: [-0.35kx, 0ky]
+      - what: circle
+        radius: screwSize
+        where: matrix_4_r1
+        adjust:
+          shift: [0kx, -0.7ky]
+  standoff:
+      - what: circle
+        radius: standoffSize
+        where: matrix_1_r4
+        adjust:
+          shift: [1.4kx, -0.5ky]
+      - what: circle
+        radius: standoffSize
+        where: matrix_1_r0
+        adjust:
+          shift: [-0.5kx, 0ky]
+      - what: circle
+        radius: standoffSize
+        where: matrix_4_r4
+        adjust:
+          shift: [-0.35kx, 0ky]
+      - what: circle
+        radius: standoffSize
+        where: matrix_4_r1
+        adjust:
+          shift: [0kx, -0.7ky]
+  
+  boardwithholes:
+    - name: xlBoard
+    - operation: subtract
+      name: standoff
+    - operation: add
+      name: mounting
+    
+
+
 
 pcbs:
   numpad-wireless:
